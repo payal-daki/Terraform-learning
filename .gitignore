@@ -1,0 +1,10 @@
+# Terraform files
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars        # contains secrets
+.terraform.lock.hcl
+
+# AWS credentials
+.aws/
+credentials
