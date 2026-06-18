@@ -216,22 +216,6 @@ terraform.tfstate updated
 
 ------------------------------------------------------------------------
 
-# Summary
-
-  File                  Why we use it
-  --------------------- -------------------------------------
-  provider.tf           Connect Terraform to AWS
-  main.tf               Define infrastructure
-  variables.tf          Declare reusable inputs
-  terraform.tfvars      Store variable values
-  outputs.tf            Display useful outputs
-  terraform.tfstate     Store current infrastructure state
-  .terraform            Provider plugins and internal files
-  .terraform.lock.hcl   Lock provider versions
-  README.md             Project documentation
-
-------------------------------------------------------------------------
-
 # Key Takeaways
 
 -   **provider.tf** → Which cloud to use.
