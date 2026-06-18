@@ -1,0 +1,4 @@
+*.tfvars          # may contain secrets
+.terraform/
+*.tfstate
+*.tfstate.backup
