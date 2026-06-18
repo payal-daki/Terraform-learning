@@ -193,19 +193,6 @@ Usually committed to Git.
 
 ------------------------------------------------------------------------
 
-# README.md
-
-Explains:
-
--   Project purpose
--   Commands
--   Prerequisites
--   Folder structure
-
-Useful for documentation.
-
-------------------------------------------------------------------------
-
 # Terraform Workflow
 
 ``` text
