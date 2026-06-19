@@ -2,11 +2,7 @@
 
 ---
 
-## Day 1 — Terraform Basics & First EC2
-
----
-
-### Why Does Terraform Exist?
+## Why Does Terraform Exist?
 
 Right now to create infrastructure on AWS you:
 
@@ -30,7 +26,7 @@ Someone deletes something by accident? You click everything again. 😵
 
 ---
 
-### Solution — Infrastructure as Code ✅
+## Solution — Infrastructure as Code ✅
 
 Instead of clicking — you **write code:**
 
@@ -50,13 +46,13 @@ terraform apply
 
 ---
 
-### What is Terraform?
+## What is Terraform?
 
 > Terraform is a tool that lets you **create, update, and delete** any cloud infrastructure using code.
 
 Works with AWS, GCP, Azure, and 100+ providers.
 
-**Real Life Analogy 🏠**
+### Real Life Analogy 🏠
 
 ```
 Without Terraform:
@@ -73,7 +69,7 @@ With Terraform:
 
 ---
 
-### 3 Things Terraform Does
+## 3 Things Terraform Does
 
 ```
 1. CREATE   → build infrastructure from code
@@ -83,7 +79,7 @@ With Terraform:
 
 ---
 
-### How Terraform Works — 4 Commands
+## How Terraform Works — 4 Commands
 
 ```
 Step 1 → Write code (.tf files)
@@ -101,7 +97,7 @@ Step 4 → terraform apply   (create)
 
 ---
 
-### Key Terms
+## Key Terms
 
 | Term | Meaning |
 |---|---|
@@ -115,7 +111,7 @@ Step 4 → terraform apply   (create)
 
 ---
 
-### Terraform vs AWS Console
+## Terraform vs AWS Console
 
 | | AWS Console | Terraform |
 |---|---|---|
@@ -128,17 +124,19 @@ Step 4 → terraform apply   (create)
 
 ---
 
-### File Structure
+## File Structure
 
 ```
 day1-first-ec2/
-├── provider.tf    ← tells Terraform to use AWS
-└── main.tf        ← your infrastructure code
+├── provider.tf     ← tells Terraform to use AWS
+├── main.tf         ← your infrastructure code
+├── variables.tf    ← defines all variables
+└── outputs.tf      ← prints useful info after apply
 ```
 
 ---
 
-### provider.tf
+## provider.tf
 
 ```hcl
 terraform {
@@ -151,131 +149,13 @@ terraform {
 }
 
 provider "aws" {
-  region = "ap-south-1"    # Mumbai region
+  region = var.aws_region    # using variable
 }
 ```
 
 ---
 
-### main.tf
-
-```hcl
-resource "aws_instance" "my_first_ec2" {
-  ami           = "ami-0f58b397bc5c1f2e8"   # Ubuntu 22.04 Mumbai
-  instance_type = "t3.micro"
-
-  tags = {
-    Name        = "terraform-learning"
-    Environment = "dev"
-    ManagedBy   = "terraform"
-  }
-}
-```
-
----
-
-### Understanding the Code
-
-```hcl
-resource "aws_instance" "my_first_ec2" {
-   │         │                │
-   │         │                └── your name for this resource
-   │         └── type of resource (EC2 instance)
-   └── keyword — always "resource"
-```
-
----
-
-### Run It — Step by Step
-
-```bash
-# Step 1 — Initialize
-terraform init
-
-# Step 2 — Preview
-terraform plan
-
-# Step 3 — Create
-terraform apply
-
-# Step 4 — Delete after practice (save cost!)
-terraform destroy
-```
-
----
-
-### Push to GitHub
-
-```bash
-git add .
-git commit -m "day1: first EC2 with Terraform"
-git push
-```
-
----
-
-### Summary
-
-```
-✅ Understood what Terraform is
-✅ Wrote first provider.tf
-✅ Wrote first main.tf
-✅ Ran all 4 commands
-✅ Created real EC2 on AWS
-✅ Pushed to GitHub
-```
-
----
-
----
-
-## Variables & Outputs
-
----
-
-### Problem With Day 1 Code
-
-Everything was **hardcoded:**
-
-```hcl
-ami           = "ami-0f58b397bc5c1f2e8"
-instance_type = "t3.micro"
-```
-
-What if:
-- Dev → t3.micro
-- Prod → t3.large
-
-You'd have to manually change code every time. ❌
-
----
-
-### Solution — Variables ✅
-
-> Variables in Terraform = same as `.env` file in your apps.
-
-```
-INSTANCE_TYPE=t3.micro
-AMI_ID=ami-0f58b397bc5c1f2e8
-```
-
-Instead of hardcoding → use variables. 🎯
-
----
-
-### File Structure
-
-```
-variables/
-├── provider.tf     ← same as day 1
-├── variables.tf    ← defines all variables
-├── main.tf         ← uses variables
-└── outputs.tf      ← prints useful info after apply
-```
-
----
-
-### variables.tf
+## variables.tf
 
 ```hcl
 variable "aws_region" {
@@ -311,10 +191,10 @@ variable "instance_name" {
 
 ---
 
-### main.tf — Using Variables
+## main.tf
 
 ```hcl
-resource "aws_instance" "my_ec2" {
+resource "aws_instance" "my_first_ec2" {
   ami           = var.ami_id           # using variable
   instance_type = var.instance_type    # using variable
 
@@ -326,24 +206,34 @@ resource "aws_instance" "my_ec2" {
 }
 ```
 
+### Understanding the Code
+
+```
+resource "aws_instance" "my_first_ec2" {
+   │         │                │
+   │         │                └── your name for this resource
+   │         └── type of resource (EC2 instance)
+   └── keyword — always "resource"
+```
+
 ---
 
-### outputs.tf
+## outputs.tf
 
 ```hcl
 output "instance_id" {
   description = "EC2 Instance ID"
-  value       = aws_instance.my_ec2.id
+  value       = aws_instance.my_first_ec2.id
 }
 
 output "public_ip" {
   description = "Public IP of EC2"
-  value       = aws_instance.my_ec2.public_ip
+  value       = aws_instance.my_first_ec2.public_ip
 }
 
 output "instance_type" {
   description = "Instance type used"
-  value       = aws_instance.my_ec2.instance_type
+  value       = aws_instance.my_first_ec2.instance_type
 }
 ```
 
@@ -358,7 +248,25 @@ public_ip     = "13.x.x.x"
 
 ---
 
-### Override Variables From Command Line
+## Run It — Step by Step
+
+```bash
+# Step 1 — Initialize
+terraform init
+
+# Step 2 — Preview
+terraform plan
+
+# Step 3 — Create
+terraform apply
+
+# Step 4 — Delete after practice (save cost!)
+terraform destroy
+```
+
+---
+
+## Variables — Override From Command Line
 
 ```bash
 # Create prod size instance
@@ -368,11 +276,9 @@ terraform apply -var="instance_type=t3.large" -var="environment=prod"
 terraform apply -var="aws_region=us-east-1"
 ```
 
-Same code → different result. ✅
-
 ---
 
-### terraform.tfvars — Cleaner Way
+## terraform.tfvars — Cleaner Way
 
 ```hcl
 # terraform.tfvars
@@ -382,14 +288,13 @@ instance_name = "my-dev-server"
 aws_region    = "ap-south-1"
 ```
 
-Terraform automatically reads this file:
 ```bash
 terraform apply    # reads tfvars automatically ✅
 ```
 
 ---
 
-### Dev vs Prod with tfvars 🎯
+## Dev vs Prod with tfvars 🎯
 
 ```hcl
 # dev.tfvars
@@ -417,7 +322,7 @@ terraform apply -var-file="prod.tfvars"
 
 ---
 
-### tfstate vs tfstate.backup
+## tfstate vs tfstate.backup
 
 | File | What it is |
 |---|---|
@@ -425,57 +330,39 @@ terraform apply -var-file="prod.tfvars"
 | `terraform.tfstate.backup` | Previous state — what existed BEFORE last apply |
 
 ```
-Day 1 → apply → creates EC2
-        tfstate        = {ec2: t3.micro}
-        tfstate.backup = {}
+terraform apply (t3.micro)
+→ tfstate        = {ec2: t3.micro}
+→ tfstate.backup = {}
 
-        change to t3.large → apply
-        tfstate        = {ec2: t3.large}   ← current
-        tfstate.backup = {ec2: t3.micro}   ← previous
+change to t3.large → terraform apply
+→ tfstate        = {ec2: t3.large}   ← current
+→ tfstate.backup = {ec2: t3.micro}   ← previous
 ```
 
 > If tfstate gets corrupted → restore from tfstate.backup 🎯
+> NEVER push tfstate to GitHub — contains sensitive AWS info! 🔒
 
 ---
 
-### .gitignore — Important! 🔒
+## .gitignore — Important! 🔒
 
 ```
-# Never push these to GitHub!
-*.tfvars              # may contain secrets
+*.tfvars
 .terraform/
-*.tfstate             # contains AWS account details
+*.tfstate
 *.tfstate.backup
 .terraform.lock.hcl
 ```
 
 ---
 
-### Push to GitHub
+## Push to GitHub
 
 ```bash
-terraform destroy    # clean up first!
+terraform destroy    # clean up first! save cost 💰
 git add .
-git commit -m "variables and outputs"
+git commit -m "day1: terraform basics, first EC2, variables, outputs"
 git push
-```
-
----
-
-### Summary
-
-| | Day 1 | 
-|---|---|---|
-| Values | Hardcoded | Variables |
-| Dev vs Prod | Change code manually | Change tfvars file |
-| After apply | Nothing printed | IP + ID printed |
-| Reusability | ❌ | ✅ |
-
-```
-variables.tf  →  define variables (like .env file)
-var.name      →  use variable in code
-outputs.tf    →  print useful info after apply
-tfvars file   →  set values per environment
 ```
 
 ---
@@ -483,12 +370,30 @@ tfvars file   →  set values per environment
 ## Quick Reference — All Commands
 
 ```bash
-terraform init              # setup
-terraform plan              # preview
-terraform apply             # create
-terraform destroy           # delete
-terraform apply -var="key=value"           # override one variable
+terraform init                              # setup
+terraform plan                             # preview
+terraform apply                            # create
+terraform destroy                          # delete
+terraform apply -var="key=value"           # override variable
 terraform apply -var-file="dev.tfvars"     # use tfvars file
 ```
 
 ---
+
+## Day 1 Summary ✅
+
+```
+✅ Understood what Terraform is
+✅ Wrote provider.tf
+✅ Wrote variables.tf
+✅ Wrote main.tf using variables
+✅ Wrote outputs.tf
+✅ Ran all 4 commands
+✅ Created real EC2 on AWS
+✅ Understood tfstate vs tfstate.backup
+✅ Pushed to GitHub
+```
+
+---
+
+*Day 1 complete — Terraform basics, first EC2, variables, outputs* 🚀
