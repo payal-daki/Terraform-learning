@@ -1,4 +1,4 @@
-# Terraform Learning — Day 1 & Day 2 🚀
+# Terraform Learning — Day 1 🚀
 
 ---
 
@@ -266,7 +266,7 @@ Instead of hardcoding → use variables. 🎯
 ### File Structure
 
 ```
-day2-variables/
+variables/
 ├── provider.tf     ← same as day 1
 ├── variables.tf    ← defines all variables
 ├── main.tf         ← uses variables
@@ -456,15 +456,15 @@ Day 2 → change to t3.large → apply
 ```bash
 terraform destroy    # clean up first!
 git add .
-git commit -m "day2: variables and outputs"
+git commit -m "variables and outputs"
 git push
 ```
 
 ---
 
-### Day 2 Summary
+### Summary
 
-| | Day 1 | Day 2 |
+| | Day 1 | 
 |---|---|---|
 | Values | Hardcoded | Variables |
 | Dev vs Prod | Change code manually | Change tfvars file |
@@ -492,5 +492,3 @@ terraform apply -var-file="dev.tfvars"     # use tfvars file
 ```
 
 ---
-
-*Generated during Terraform learning session — Day 1 & Day 2* 🚀
