@@ -214,7 +214,7 @@ git push
 
 ---
 
-### Day 1 Summary
+### Summary
 
 ```
 ✅ Understood what Terraform is
@@ -229,7 +229,7 @@ git push
 
 ---
 
-## Day 2 — Variables & Outputs
+## Variables & Outputs
 
 ---
 
@@ -429,7 +429,7 @@ Day 1 → apply → creates EC2
         tfstate        = {ec2: t3.micro}
         tfstate.backup = {}
 
-Day 2 → change to t3.large → apply
+        change to t3.large → apply
         tfstate        = {ec2: t3.large}   ← current
         tfstate.backup = {ec2: t3.micro}   ← previous
 ```
