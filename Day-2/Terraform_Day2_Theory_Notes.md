@@ -46,9 +46,16 @@ terraform plan -var="environment=production"
 - Validation runs before anything touches AWS
 - Think of it like form validation in a web app — catch error early
 
-### Interview Answer
-> *"How do you prevent wrong variable values in Terraform?"*
-> Add a `validation` block inside the variable with a `condition` and `error_message`.
+### Interview Q&A
+
+**Q: What happens if you pass a wrong value to a Terraform variable?**
+A: Terraform will throw an error immediately during `terraform plan` and stop — nothing gets created on AWS.
+
+**Q: How do you restrict a variable to only allow specific values?**
+A: Add a `validation` block inside the variable with a `condition` and `error_message`.
+
+**Q: What is the difference between `condition` and `error_message` in validation?**
+A: `condition` is the rule that must be true. If it fails, `error_message` is what appears on the terminal.
 
 ---
 
@@ -93,10 +100,16 @@ terraform plan
 - Pass via `TF_VAR_` environment variables
 - In real projects use AWS Secrets Manager
 
-### Interview Answer
-> *"How do you handle secrets in Terraform?"*
-> Mark variable as `sensitive = true`. Never store in tfvars files.
-> Pass via `TF_VAR_` environment variables or AWS Secrets Manager.
+### Interview Q&A
+
+**Q: How do you handle secrets in Terraform?**
+A: Mark the variable as `sensitive = true`. Never store secrets in tfvars files as they go to GitHub. Pass via `TF_VAR_` environment variables or use AWS Secrets Manager.
+
+**Q: What does `sensitive = true` actually do?**
+A: It hides the value from terminal output during `terraform plan` and `terraform apply` — it shows `(sensitive value)` instead of the actual value.
+
+**Q: Can sensitive values still be seen in the state file?**
+A: Yes — sensitive values are still stored in `terraform.tfstate` in plain text. That is why the state file should never be pushed to GitHub.
 
 ---
 
@@ -175,11 +188,16 @@ With locals    → write once → change in 1 place → updates everywhere ✅
 - Define in `locals.tf` (separate file, cleaner)
 - `merge()` combines two tag maps into one
 
-### Interview Answer
-> *"What is the difference between a variable and a local in Terraform?"*
-> Variable is an input from outside your code (passed by user or tfvars).
-> Local is a value computed inside your code, like combining two variables.
-> Locals are great for shared tags across all resources.
+### Interview Q&A
+
+**Q: What is the difference between a variable and a local in Terraform?**
+A: Variable is an input from outside your code — passed by user or tfvars file. Local is a value computed inside your code, like combining two variables together.
+
+**Q: When would you use locals over variables?**
+A: When the value is not an input but something you calculate — like combining environment and name into a full resource name, or defining common tags shared across all resources.
+
+**Q: How do you apply the same tags to all resources in Terraform?**
+A: Define a `common_tags` local with all shared tags, then use `merge(local.common_tags, { Name = "..." })` in each resource.
 
 ---
 
