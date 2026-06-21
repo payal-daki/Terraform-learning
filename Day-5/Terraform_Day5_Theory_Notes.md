@@ -458,12 +458,12 @@ Root main.tf
 ```
 modules/ → never change ✅
 
-# jumpick-dev.tfvars
+# test-dev.tfvars
 environment   = "dev"
 vpc_cidr      = "10.0.0.0/16"
 instance_type = "t3.micro"
 
-# jumpick-prod.tfvars
+# test-prod.tfvars
 environment   = "prod"
 vpc_cidr      = "10.1.0.0/16"
 instance_type = "t3.large"
@@ -471,10 +471,10 @@ instance_type = "t3.large"
 
 ```bash
 # Deploy dev
-terraform apply -var-file="jumpick-dev.tfvars"
+terraform apply -var-file="test-dev.tfvars"
 
 # Deploy prod
-terraform apply -var-file="jumpick-prod.tfvars"
+terraform apply -var-file="test-prod.tfvars"
 ```
 
 Same modules — different environments! 🎯
