@@ -35,7 +35,7 @@ variable "instance_type" {
 
 variable "db_name" {
   type    = string
-  default = "jumpickdb"
+  default = "testdb"
 }
 
 variable "db_username" {
@@ -50,5 +50,5 @@ variable "db_password" {
 
 variable "bucket_name" {
   type    = string
-  default = "jumpick-app-storage-2026"
+  default = "test-app-storage-2026"
 }
