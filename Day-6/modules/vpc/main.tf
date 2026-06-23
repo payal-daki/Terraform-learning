@@ -10,6 +10,8 @@ resource "aws_vpc" "main" {
   }
 }
 
+# Public Subnet
+
 resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.public_subnet_cidr
@@ -22,13 +24,28 @@ resource "aws_subnet" "public" {
   }
 }
 
-resource "aws_subnet" "private" {
+# Private Subnet 1
+
+resource "aws_subnet" "private_1" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnet_cidr
+  cidr_block        = var.private_subnet_1_cidr
+  availability_zone = "ap-south-1a"
+
+  tags = {
+    Name        = "${var.environment}-private-subnet-1"
+    Environment = var.environment
+  }
+}
+
+# Private Subnet 2
+
+resource "aws_subnet" "private_2" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.private_subnet_2_cidr
   availability_zone = "ap-south-1b"
 
   tags = {
-    Name        = "${var.environment}-private-subnet"
+    Name        = "${var.environment}-private-subnet-2"
     Environment = var.environment
   }
 }
@@ -60,3 +77,4 @@ resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public.id
 }
+

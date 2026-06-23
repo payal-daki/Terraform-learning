@@ -8,12 +8,14 @@ variable "public_subnet_cidr" {
   type        = string
 }
 
-variable "private_subnet_cidr" {
-  description = "Private subnet CIDR"
-  type        = string
-}
-
 variable "environment" {
   description = "Environment name"
   type        = string
+}
+variable "private_subnet_1_cidr" {
+  type = string
+}
+
+variable "private_subnet_2_cidr" {
+  type = string
 }

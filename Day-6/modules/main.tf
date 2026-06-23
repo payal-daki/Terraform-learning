@@ -48,7 +48,7 @@ resource "aws_security_group" "rds" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-    security_groups = [aws_security_group.web.id]  # only from web server!
+    security_groups = [aws_security_group.web.id] # only from web server!
   }
 
   egress {
@@ -66,17 +66,17 @@ resource "aws_security_group" "rds" {
 
 # VPC Module
 module "vpc" {
-  source = "./modules/vpc"
+  source = "./vpc"
 
-  vpc_cidr            = var.vpc_cidr
-  public_subnet_cidr  = var.public_subnet_cidr
-  private_subnet_cidr = var.private_subnet_cidr
-  environment         = var.environment
+  vpc_cidr              = var.vpc_cidr
+  public_subnet_cidr    = var.public_subnet_cidr
+  private_subnet_1_cidr = var.private_subnet_1_cidr
+  private_subnet_2_cidr = var.private_subnet_2_cidr
+  environment           = var.environment
 }
-
 # EC2 Module
 module "ec2" {
-  source = "./modules/ec2"
+  source = "./ec2"
 
   ami_id             = var.ami_id
   instance_type      = var.instance_type
@@ -85,22 +85,25 @@ module "ec2" {
   environment        = var.environment
   instance_name      = "${var.environment}-web-server"
 }
-
-# RDS Module
 module "rds" {
-  source = "./modules/rds"
+  source = "./rds"
 
-  db_name           = var.db_name
-  db_username       = var.db_username
-  db_password       = var.db_password
-  subnet_ids        = [module.vpc.private_subnet_id]
+  db_name     = var.db_name
+  db_username = var.db_username
+  db_password = var.db_password
+
+  subnet_ids = [
+    module.vpc.private_subnet_1_id,
+    module.vpc.private_subnet_2_id
+  ]
+
   security_group_id = aws_security_group.rds.id
   environment       = var.environment
 }
 
 # S3 Module
 module "s3" {
-  source = "./modules/s3"
+  source = "./s3"
 
   bucket_name = var.bucket_name
   environment = var.environment
