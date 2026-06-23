@@ -24,7 +24,7 @@ variable "private_subnet_1_cidr" {
 
 variable "private_subnet_2_cidr" {
   type    = string
-  default = "10.0.3.0/24"
+  default = "10.1.4.0/24"
 }
 variable "ami_id" {
   type    = string
