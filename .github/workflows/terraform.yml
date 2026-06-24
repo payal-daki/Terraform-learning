@@ -1,0 +1,61 @@
+name: Terraform CI/CD
+
+on:
+  push:
+    branches:
+      - main                    # runs on push to main
+    paths:
+      - 'Day-7/**'              # only when Day-7 files change
+  pull_request:
+    branches:
+      - main                    # runs on PR to main
+
+jobs:
+  terraform:
+    name: Terraform Plan & Apply
+    runs-on: ubuntu-latest      # runs on GitHub's server
+
+    steps:
+      # Step 1 - Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2 - Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.0
+
+      # Step 3 - Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:            ap-south-1
+
+      # Step 4 - Terraform Init
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./Day-7
+
+      # Step 5 - Terraform Format Check
+      - name: Terraform Format
+        run: terraform fmt -check
+        working-directory: ./Day-7
+
+      # Step 6 - Terraform Validate
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ./Day-7
+
+      # Step 7 - Terraform Plan
+      - name: Terraform Plan
+        run: terraform plan -var="db_password=${{ secrets.DB_PASSWORD }}"
+        working-directory: ./Day-7
+
+      # Step 8 - Terraform Apply (only on push to main)
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -var="db_password=${{ secrets.DB_PASSWORD }}"
+        working-directory: ./Day-7
