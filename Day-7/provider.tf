@@ -1,10 +1,9 @@
 terraform {
   backend "s3" {
-    bucket         = "terraform-state-piyu-2026"
-    key            = "day7/terraform.tfstate"
-    region         = "ap-south-1"
-    dynamodb_table = "terraform-state-lock"
-    encrypt        = true
+    bucket  = "terraform-state-piyu-2026"
+    key     = "day7/terraform.tfstate"
+    region  = "ap-south-1"
+    encrypt = true
   }
 
   required_providers {
